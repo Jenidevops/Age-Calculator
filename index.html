@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+
+      /* background as fallback */
+      background: url('image/agecalpic.jpg') no-repeat center center;
+      background-size: cover;
+    }
+
+    /* 🔥 Background zoom-out loop */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+
+      animation: smoothZoomOut 15s linear infinite;
+      transform-origin: center;
+    }
+
+    @keyframes smoothZoomOut {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      90% {
+        transform: scale(1.6); /* controlled zoom */
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.6);
+        opacity: 0; /* fade out just before reset */
+      }
+    }
+
+    /* Box Styling */
+    .box {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 340px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    h3 {
+      margin-bottom: 20px;
+      color: white;
+      text-decoration: outline;
+      outline-color: black;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      outline: none;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button.calculate {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+    }
+
+    button.calculate:hover {
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+      transform: scale(1.05);
+    }
+
+    button.reset {
+      background: linear-gradient(135deg, #e53e3e, #c53030);
+      color: #fff;
+    }
+
+    button.reset:hover {
+      background: linear-gradient(135deg, #c53030, #9b2c2c);
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 12px;
+      border-radius: 8px;
+      min-height: 45px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h3>AGE CALCULATOR</h3>
+    <input type="date" id="dob" />
+    <div class="btn-group">
+      <button class="calculate" onclick="calculateAge()">Calculate</button>
+      <button class="reset" onclick="resetForm()">Reset</button>
+    </div>
+    <div class="result" id="result">Select your birthdate</div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      const dob = document.getElementById('dob').value;
+      const resultEl = document.getElementById('result');
+
+      if (!dob) {
+        resultEl.innerText = "Please select a valid date.";
+        return;
+      }
+
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      let ageYears = today.getFullYear() - birthDate.getFullYear();
+      let ageMonths = today.getMonth() - birthDate.getMonth();
+      let ageDays = today.getDate() - birthDate.getDate();
+
+      if (ageDays < 0) {
+        ageMonths--;
+        ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+      }
+      if (ageMonths < 0) {
+        ageYears--;
+        ageMonths += 12;
+      }
+
+      resultEl.innerText = `Your age is ${ageYears} years, ${ageMonths} months, and ${ageDays} days.`;
+    }
+
+    function resetForm() {
+      document.getElementById('dob').value = "";
+      document.getElementById('result').innerText = "Select your birthdate";
+    }
+  </script>
+</body>
+</html>
